@@ -18,6 +18,14 @@ class RbIRC
 			sock.puts "NICK #{nick}\r\n" , 'UTF-8'	
 			sock.puts "JOIN #{channel}\r\n"			
 		end
+      while line = sock.gets
+            if  line.include? "PING"  
+              ping = Array.new
+              ping = line.split()
+              puts "AH PING RUN"
+              sock.puts "PONG #{ping.join[1,-1]}\r\n"
+              line = sock.gets
+            end       
     Parser.start(sock, channel, nick)
 		if bot == false
             next
@@ -25,12 +33,7 @@ class RbIRC
             Parser.bot()      
           end         
 		end			
-		while line = sock.gets
-			if  line.include? "PING"	
-				ping = Array.new
-				ping = line.split(':')
-				sock.puts "PONG : #{ping[1]}\r\n"
-			end				
+		
 		end	
 	end
 end
